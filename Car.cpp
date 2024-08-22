@@ -1,5 +1,7 @@
 //Car.cpp is the Car class function implementation file.
 #include "Car.h"
+#include <string>
+using namespace std;
 
 /*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
   +                                Car::buildInfo                                            +
@@ -9,6 +11,7 @@
 void Car::buildInfo(int tankSize, int fuelEconomy, string name) {
   FuelTankSize = tankSize;
   MilesPerGallon = fuelEconomy;
+  ModelName = name;
   FuelInTank = 0;
   Odometer = 0;
 }
@@ -31,6 +34,14 @@ void Car::setFuelInTank(float gas) {
 void Car::setOdometer(int miles) {
   Odometer += miles;
   return;
+}
+
+/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+  +                                Car::getName                                              +
+  + Returns the Model Name string value      .                                               +
+  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
+string Car::getName() const {
+  return ModelName;
 }
 
 /*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++

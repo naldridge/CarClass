@@ -8,10 +8,32 @@
 #include <limits>
 #include <random>
 #include <array>
+#include <vector>
+#include <algorithm>
 #include "Car.h"
 using namespace std;
 
-string modelName;                               //global variable to store user selected model name
+
+/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+  +                                      vectorCheck                                         +
+  + Function that checks a value if it's in a vector for Car Categories. Returns an int.     +
+  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
+int vectorCheck(string value) {
+    int returnValue;
+    vector<string> sportCars = {"Ford Mustang", "Chevy Camaro", "Mazda RX-8", "Dodge Charger"};
+    vector<string> truckCars = {"Chevy Bolt", "Toyota Prius", "Kia Soul", "BMW X5"};
+    vector<string> hybridCars = {"Ford Mustang", "Chevy Camaro", "Mazda RX-8", "Dodge Charger"};
+
+    if (find(sportCars.begin(), sportCars.end(), value) != sportCars.end()) {
+        returnValue = 1;
+    } else if (find(truckCars.begin(), truckCars.end(), value) != truckCars.end()) {
+        returnValue = 2;
+    } else if (find(hybridCars.begin(), hybridCars.end(), value) != hybridCars.end()) {
+        returnValue = 3;
+    }
+
+    return returnValue;
+}
 
 /*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
   +                                      carRandomizer                                       +
@@ -62,20 +84,20 @@ void errorInput(bool resolve) {
   + Creates and returns a locally defined Car Object.                                        +
   ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
 
-Car buildCar(int userInput) {
+Car buildCar(string userInput) {
     Car tempItem;                                   //local Car object
-    //string modelName;                             //local variable for model name
+    string name = userInput;                        //local variable for model name
     int tankSize;                                   //local variable for tank size
     int fuelEconomy;                                //local variable for fuel economy
     int carRand = rand() % 5;
 
-    if (userInput == 1) {
+    if (vectorCheck(userInput) == 1) {
         tankSize = 12;
         fuelEconomy = (rand() % 11) + 14;
-    } else if (userInput == 2) {
+    } else if (vectorCheck(userInput) == 2) {
         tankSize = 18;
         fuelEconomy = (rand() % 9) + 8;
-    } else if (userInput == 3) {
+    } else if (vectorCheck(userInput) == 3) {
         tankSize = 12;
         fuelEconomy = (rand() % 23) + 28;
     }
@@ -83,7 +105,7 @@ Car buildCar(int userInput) {
 
 
     //Stores the data in the Car object and return it
-    tempItem.buildInfo(tankSize, fuelEconomy);
+    tempItem.buildInfo(tankSize, fuelEconomy, name);
     return tempItem;
 }
 
@@ -128,9 +150,9 @@ Car carSelect() {
         cin >> modelInput;
         
         if ((modelInput > 0) && (modelInput < 4)) {
-            modelName = arrCars[(modelInput - 1)][arrRNum[modelInput - 1]];
+            string modelName = arrCars[(modelInput - 1)][arrRNum[modelInput - 1]];
             cout << "Great selection! Let's show you those stats." << endl;
-            userSelection = buildCar(modelInput);
+            userSelection = buildCar(modelName);
             getch();
             continueValue = true;
             system("cls");
@@ -162,7 +184,7 @@ Car carSelect() {
 
 void showCar(const Car &item) {
     cout << fixed << showpoint << setprecision(2) << endl;
-    cout << "Your Car: " << modelName << endl;
+    cout << "Your Car: " << item.getName() << endl;
     cout << "Fuel Tank Size: " << item.getFuelTankSize() << " gallons." << endl;
     cout << "Fuel Economy: " << item.getMilesPerGallon() << " mpg." << endl;
     cout << "Fuel Remaining: " << item.getFuelInTank() << " gallons remaining." << endl;
